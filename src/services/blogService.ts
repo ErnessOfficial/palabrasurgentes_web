@@ -47,7 +47,8 @@ export const useArticles = () => {
     let cancelled = false
     ;(async () => {
       try {
-        const data = await fetchJsonSafe('/blog-index.json') as { entries: ArticleEntry[] }
+        const base = import.meta.env.BASE_URL || '/'
+        const data = await fetchJsonSafe(`${base}blog-index.json`) as { entries: ArticleEntry[] }
         if (!cancelled) {
           setArticles(toStructure(data.entries || []))
           setLoading(false)
@@ -66,7 +67,8 @@ export const useArticles = () => {
 };
 
 export const loadArticleContent = async (p: string): Promise<string> => {
-  const response = await fetch(`/Articulos/${p}/index.html`);
+  const base = import.meta.env.BASE_URL || '/'
+  const response = await fetch(`${base}Articulos/${p}/index.html`);
   if (!response.ok) throw new Error('Article not found');
   return await response.text();
 };

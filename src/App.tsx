@@ -12,7 +12,7 @@ const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState('home');
 
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <LanguageProvider>
         <div className="app">
           <Header />

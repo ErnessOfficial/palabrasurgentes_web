@@ -20,15 +20,15 @@ const BlogArticle: React.FC = () => {
   // Caso especial: ejercicio de mindfulness
   if (articlePath?.includes('Ejercicio-mindfulness')) {
     const decoded = decodeURIComponent(articlePath);
-    const assetBase = `/Articulos/${decoded}`;
+    const assetBase = `${import.meta.env.BASE_URL || '/'}Articulos/${decoded}`;
     return <MindfulnessExercise assetBase={assetBase} />;
   }
 
   const decodedPath = useMemo(() => decodeURIComponent(articlePath || ''), [articlePath]);
   const category = decodedPath.split('/')[0] || '';
   const subcategory = decodedPath.split('/')[1] || '';
-  const spanishSrc = useMemo(() => encodeURI(`/Articulos/${decodedPath}/index.html`), [decodedPath]);
-  const englishSrc = useMemo(() => encodeURI(`/Articulos_en/${decodedPath}/index.html`), [decodedPath]);
+  const spanishSrc = useMemo(() => encodeURI(`${import.meta.env.BASE_URL || '/'}Articulos/${decodedPath}/index.html`), [decodedPath]);
+  const englishSrc = useMemo(() => encodeURI(`${import.meta.env.BASE_URL || '/'}Articulos_en/${decodedPath}/index.html`), [decodedPath]);
   const [iframeSrc, setIframeSrc] = useState<string>(spanishSrc);
 
   const injectBase = (html: string, baseHref: string) => {
@@ -93,7 +93,7 @@ const BlogArticle: React.FC = () => {
             const cached = typeof window !== 'undefined' ? window.localStorage.getItem(cacheKey) : null;
             if (cached && !cancelled) {
               setIframeSrc('about:blank');
-              setIframeSrcDoc(injectBase(cached, `/Articulos/${decodedPath}/`));
+              setIframeSrcDoc(injectBase(cached, `${import.meta.env.BASE_URL || '/'}Articulos/${decodedPath}/`));
               setLoading(false);
               return;
             }
@@ -112,7 +112,7 @@ const BlogArticle: React.FC = () => {
                 if (!cancelled && translated) {
                   try { window.localStorage.setItem(cacheKey, translated); } catch {}
                   setIframeSrc('about:blank');
-                  setIframeSrcDoc(injectBase(translated, `/Articulos/${decodedPath}/`));
+                  setIframeSrcDoc(injectBase(translated, `${import.meta.env.BASE_URL || '/'}Articulos/${decodedPath}/`));
                   setLoading(false);
                   return;
                 }
@@ -189,7 +189,7 @@ const BlogArticle: React.FC = () => {
   return (
     <div className="article-page-container" style={{ paddingTop: 20, paddingBottom: 20 }}>
       <div className="article-actions">
-        <a href="/blog" onClick={handleBack} className="back-btn">
+        <a href={`${import.meta.env.BASE_URL || '/' }blog`} onClick={handleBack} className="back-btn">
           {language === 'es' ? 'Volver al listado' : 'Back to list'}
         </a>
       </div>
@@ -209,7 +209,7 @@ const BlogArticle: React.FC = () => {
         />
       </div>
       <div className="article-actions article-actions--bottom">
-        <a href="/blog" onClick={handleBack} className="back-btn">
+        <a href={`${import.meta.env.BASE_URL || '/' }blog`} onClick={handleBack} className="back-btn">
           {language === 'es' ? 'Volver al listado' : 'Back to list'}
         </a>
       </div>

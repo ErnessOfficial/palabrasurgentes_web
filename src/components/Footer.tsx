@@ -68,10 +68,14 @@ const Footer: React.FC = () => (
         </div>
         <a href="mailto:info@entrepalabrasurgentes.com" className="contact-link">Contáctanos</a>
         <div className="logo-container">
-          <div className="logo-box"><img className="logo-img" src="/images/logopie1.png" alt="Logo 1" loading="lazy" /></div>
-          <div className="logo-box"><img className="logo-img" src="/images/logopie2.png" alt="Logo 2" loading="lazy" /></div>
-          <div className="logo-box"><img className="logo-img" src="/images/logopie3.png" alt="Logo 3" loading="lazy" /></div>
-          <div className="logo-box"><img className="logo-img" src="/images/logopie4.png" alt="Logo 4" loading="lazy" /></div>
+          {(() => { const base = import.meta.env.BASE_URL || '/'; return (
+            <>
+              <div className="logo-box"><img className="logo-img" src={`${base}images/logopie1.png`} alt="Logo 1" loading="lazy" /></div>
+              <div className="logo-box"><img className="logo-img" src={`${base}images/logopie2.png`} alt="Logo 2" loading="lazy" /></div>
+              <div className="logo-box"><img className="logo-img" src={`${base}images/logopie3.png`} alt="Logo 3" loading="lazy" /></div>
+              <div className="logo-box"><img className="logo-img" src={`${base}images/logopie4.png`} alt="Logo 4" loading="lazy" /></div>
+            </>
+          )})()}
         </div>
       </div>
     </div>

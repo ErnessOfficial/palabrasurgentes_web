@@ -19,7 +19,8 @@ const BlogList: React.FC = () => {
     if (language !== 'en') { setTranslatedIndex(null); return; }
     (async () => {
       try {
-        const res = await fetch('/blog-index-en.json', { cache: 'no-cache' });
+        const base = import.meta.env.BASE_URL || '/';
+        const res = await fetch(`${base}blog-index-en.json`, { cache: 'no-cache' });
         if (!res.ok) return;
         const text = await res.text();
         if (!text || !text.trim()) return;

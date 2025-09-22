@@ -30,7 +30,7 @@ const MindfulnessExercise: React.FC<Props> = ({ assetBase }) => {
         // Start playback
         const audioSrc = assetBase
           ? `${assetBase}/mindfulnessaudio.mp3`
-          : '/mindfulnessaudio.mp3';
+          : `${import.meta.env.BASE_URL || '/'}mindfulnessaudio.mp3`;
         backgroundMusicRef.current = new Audio(audioSrc);
         await backgroundMusicRef.current.play();
         setIsPlaying(true);
@@ -54,7 +54,7 @@ const MindfulnessExercise: React.FC<Props> = ({ assetBase }) => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl p-8 shadow-lg max-w-lg w-full">
         <img 
-          src={assetBase ? `${assetBase}/logo.png` : '/images/banner.png'} 
+          src={assetBase ? `${assetBase}/logo.png` : `${import.meta.env.BASE_URL || '/'}images/banner.png`} 
           alt="Logo" 
           className="w-full max-w-md mx-auto mb-8"
         />
@@ -94,7 +94,7 @@ const MindfulnessExercise: React.FC<Props> = ({ assetBase }) => {
         )}
         
         <a
-          href="/"
+          href={import.meta.env.BASE_URL || '/'}
           className="mt-8 block text-center py-3 text-green-600 hover:text-green-700 transition-colors"
         >
           {language==='es'?'Volver a la Lista de Contenidos':'Back to Contents'}

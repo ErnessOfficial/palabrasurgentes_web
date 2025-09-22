@@ -21,8 +21,9 @@ const Navigation: React.FC<Props> = ({ activeSection, setActiveSection }) => {
     // Interact and Learn are intentionally hidden from navigation
   ];
 
+  const BASE = import.meta.env.BASE_URL || '/'
   const handleNavigation = (sectionId: string) => {
-    if (location.pathname !== '/') {
+    if (location.pathname !== BASE) {
       navigate('/');
     }
     setActiveSection(sectionId);
@@ -36,7 +37,7 @@ const Navigation: React.FC<Props> = ({ activeSection, setActiveSection }) => {
             <li key={item.id} className="nav-item">
               <button
                 onClick={() => handleNavigation(item.id)}
-                className={`nav-link ${activeSection === item.id && location.pathname === '/' ? 'active' : ''}`}
+                className={`nav-link ${activeSection === item.id && location.pathname === BASE ? 'active' : ''}`}
               >
                 {item.label}
               </button>

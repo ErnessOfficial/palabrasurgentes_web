@@ -2,6 +2,7 @@ import React from 'react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translationsEs, translationsEn } from '../translations';
 import FlipCard from './FlipCard';
+const BASE = import.meta.env.BASE_URL || '/';
 import { IconYouTube as FooterIconYouTube, IconFacebook, IconInstagram, IconTikTok, IconLinkedIn } from './Footer';
 import BlogList from './blog/BlogList';
 interface Props { activeSection: string; setActiveSection: (s: string) => void; }
@@ -56,11 +57,11 @@ const ExploreSection: React.FC<{ language: 'es' | 'en'; t: any }> = ({ language,
       <div className="container">
         <div className="intro-text"><p className="intro-rest">{t.exploreIntro}</p></div>
         <div className="cards-container">
-          <FlipCard image="/images/explora1.png" title={t.exploreFlipBlogTitle} description={t.exploreFlipBlogDesc}
+          <FlipCard image={`${BASE}images/explora1.png`} title={t.exploreFlipBlogTitle} description={t.exploreFlipBlogDesc}
             links={[{label: language==='es'?'Listado de artículos':'Articles list', href:'#epu-blog', internal: true}]} />
-          <FlipCard image="/images/explora2.png" title={t.exploreFlipBooksTitle} description={t.exploreFlipBooksDesc}
+          <FlipCard image={`${BASE}images/explora2.png`} title={t.exploreFlipBooksTitle} description={t.exploreFlipBooksDesc}
             links={[{label: language==='es'?'Listado de libros':'Books list', href:'#'},{label:'Libro 2', href:'#'},{label:'Libro 3', href:'#'}]} />
-          <FlipCard image="/images/explora3.png" title={t.exploreFlipResourcesTitle} description={t.exploreFlipResourcesDesc}
+          <FlipCard image={`${BASE}images/explora3.png`} title={t.exploreFlipResourcesTitle} description={t.exploreFlipResourcesDesc}
             links={[{label: language==='es'?'Listado de recursos':'Resources list', href:'#'},{label:'Recurso 2', href:'#'},{label:'Recurso 3', href:'#'}]} />
         </div>
         <div id="epu-blog" className="image-container" style={{ marginTop: '40px' }}>
@@ -70,7 +71,7 @@ const ExploreSection: React.FC<{ language: 'es' | 'en'; t: any }> = ({ language,
           </div>
         </div>
         <div className="image-container" style={{ marginTop: '40px' }}>
-          <iframe src="/guide/index.html" style={{ width: '100%', height: '1200px', border: 'none', borderRadius: '8px', boxShadow: '0 8px 20px rgba(0,0,0,0.15)' }} title="Guía Emocional Interactiva"></iframe>
+          <iframe src={`${BASE}guide/index.html`} style={{ width: '100%', height: '1200px', border: 'none', borderRadius: '8px', boxShadow: '0 8px 20px rgba(0,0,0,0.15)' }} title="Guía Emocional Interactiva"></iframe>
         </div>
       </div>
     </div>
@@ -86,10 +87,10 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
     : 'Beyond projects, stories bring us together.';
 
   const cards = [
-    { id: 'musica', image: '/images/musica_conecta.png', title: isEs ? 'Música' : 'Music', text: isEs ? 'La música no solo me acompaña, me define.' : 'Music doesn’t just accompany me — it defines me.', cta: isEs ? 'Descubre mi mundo musical' : 'Discover my music world' },
-    { id: 'escritura', image: '/images/escritura_conecta.png', title: isEs ? 'Escritura' : 'Writing', text: isEs ? 'Algunas historias necesitan ser contadas.' : 'Some stories simply need to be told.', cta: isEs ? 'Lee más sobre mi escritura' : 'Read more about my writing' },
-    { id: 'migrar', image: '/images/migrar_conecta.png', title: isEs ? 'Migrar & Reinventarse' : 'Migrate & Reinvent', text: isEs ? 'He vivido en tres países, cada uno me transformó.' : 'I’ve lived in three countries; each one transformed me.', cta: isEs ? 'Conoce mi historia migrante' : 'Know my migrant story' },
-    { id: 'vocacional', image: '/images/vocacional_conecta.png', title: isEs ? 'Vocación social' : 'Social vocation', text: isEs ? 'Trabajo para transformar vidas desde la justicia.' : 'I work to transform lives through justice.', cta: isEs ? 'Mi experiencia en justicia comunitaria' : 'My community justice experience' },
+    { id: 'musica', image: `${BASE}images/musica_conecta.png`, title: isEs ? 'Música' : 'Music', text: isEs ? 'La música no solo me acompaña, me define.' : 'Music doesn’t just accompany me — it defines me.', cta: isEs ? 'Descubre mi mundo musical' : 'Discover my music world' },
+    { id: 'escritura', image: `${BASE}images/escritura_conecta.png`, title: isEs ? 'Escritura' : 'Writing', text: isEs ? 'Algunas historias necesitan ser contadas.' : 'Some stories simply need to be told.', cta: isEs ? 'Lee más sobre mi escritura' : 'Read more about my writing' },
+    { id: 'migrar', image: `${BASE}images/migrar_conecta.png`, title: isEs ? 'Migrar & Reinventarse' : 'Migrate & Reinvent', text: isEs ? 'He vivido en tres países, cada uno me transformó.' : 'I’ve lived in three countries; each one transformed me.', cta: isEs ? 'Conoce mi historia migrante' : 'Know my migrant story' },
+    { id: 'vocacional', image: `${BASE}images/vocacional_conecta.png`, title: isEs ? 'Vocación social' : 'Social vocation', text: isEs ? 'Trabajo para transformar vidas desde la justicia.' : 'I work to transform lives through justice.', cta: isEs ? 'Mi experiencia en justicia comunitaria' : 'My community justice experience' },
   ] as const;
 
   const [activeModule, setActiveModule] = React.useState<null | typeof cards[number]['id']>(null);
@@ -194,7 +195,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
       <div className="container">
         {activeModule === null ? (
           <>
-            <div className="connect-hero"><img src="/images/conecta_01.png" alt="Conecta" className="connect-hero-img" /></div>
+            <div className="connect-hero"><img src={`${BASE}images/conecta_01.png`} alt="Conecta" className="connect-hero-img" /></div>
             <div className="connect-separator" aria-hidden="true"></div>
             <div className="connect-grid">
               {cards.map((c, i) => (
@@ -216,19 +217,19 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
               const modules = {
                 musica: {
                   title: isEs ? 'Deja que la música nos conecte' : 'Let music connect us',
-                  images: ['/images/modulo_musica.png']
+                  images: [`${BASE}images/modulo_musica.png`]
                 },
                 escritura: {
                   title: isEs ? 'Conecta con las historias de mis libros' : 'Connect with stories from my books',
-                  images: ['/images/modulo_escritura.png']
+                  images: [`${BASE}images/modulo_escritura.png`]
                 },
                 migrar: {
                   title: isEs ? 'Que nos conecte el sentimiento de estar lejos' : 'Let the feeling of being far connect us',
-                  images: ['/images/modulo_migrar.png']
+                  images: [`${BASE}images/modulo_migrar.png`]
                 },
                 vocacional: {
                   title: isEs ? 'Conectemos con justicia y comunicación' : 'Let’s connect with justice and communication',
-                  images: ['/images/modulo_vocacional01.png','/images/modulo_vocacional02.png']
+                  images: [`${BASE}images/modulo_vocacional01.png`, `${BASE}images/modulo_vocacional02.png`]
                 }
               } as const;
               const m = modules[activeModule];
@@ -252,7 +253,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                             : 'You can get any of my publications as an e‑book from anywhere via Amazon Kindle, and depending on your country you may also get them in print.'}
                         </p>
                         <div style={{ textAlign: 'center', margin: '16px 0' }}>
-                          <img src="/images/amazonkindle.png" alt="Amazon Kindle" style={{ maxWidth: 360, width: '100%', height: 'auto' }} />
+                          <img src={`${BASE}images/amazonkindle.png`} alt="Amazon Kindle" style={{ maxWidth: 360, width: '100%', height: 'auto' }} />
                         </div>
                         <p style={{ color: '#24668e', marginBottom: 12, textAlign: 'center' }}>
                           {isEs ? (
@@ -268,7 +269,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                           )}
                         </p>
                         <div style={{ textAlign: 'center', marginTop: 18 }}>
-                          <img src="/images/googleplaybooks.png" alt="Google Play Books" style={{ maxWidth: 260, width: '100%', height: 'auto' }} />
+                          <img src={`${BASE}images/googleplaybooks.png`} alt="Google Play Books" style={{ maxWidth: 260, width: '100%', height: 'auto' }} />
                           <div style={{ fontWeight: 800, marginTop: 8 }}>ebooks disponibles en Google Play books</div>
                         </div>
                       </div>
@@ -278,7 +279,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                         {/* Bloque 1: imagen izquierda, texto derecha */}
                         <div style={{ display: 'flex', gap: 16, alignItems: 'stretch', flexWrap: 'wrap' }}>
                           <div style={{ flex: '1 1 280px' }}>
-                            <img src="/images/escriturabloque1.png" alt="Bloque 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
+                            <img src={`${BASE}images/escriturabloque1.png`} alt="Bloque 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
                           <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>Lo Unico Urgente es Vivir, aun así, LLegamos Tarde</h4>
@@ -291,7 +292,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                         {/* Bloque 2: texto izquierda, imagen derecha (REEMPLAZAR) */}
                         <div style={{ display: 'flex', gap: 16, alignItems: 'stretch', flexWrap: 'wrap', flexDirection: 'row-reverse' }}>
                           <div style={{ flex: '1 1 280px' }}>
-                            <img src="/images/REEMPLAZA_IMAGEN_BLOQUE2.png" alt="[REEMPLAZA_IMAGEN_BLOQUE2]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
+                            <img src={`${BASE}images/REEMPLAZA_IMAGEN_BLOQUE2.png`} alt="[REEMPLAZA_IMAGEN_BLOQUE2]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
                           <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>EL ULTIMO SUSPIRO DE LA NUEVA ATLANTIDA</h4>
@@ -302,7 +303,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                         {/* Bloque 3: imagen izquierda, texto derecha (REEMPLAZAR) */}
                         <div style={{ display: 'flex', gap: 16, alignItems: 'stretch', flexWrap: 'wrap' }}>
                           <div style={{ flex: '1 1 280px' }}>
-                            <img src="/images/REEMPLAZA_IMAGEN_BLOQUE3.png" alt="[REEMPLAZA_IMAGEN_BLOQUE3]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
+                            <img src={`${BASE}images/REEMPLAZA_IMAGEN_BLOQUE3.png`} alt="[REEMPLAZA_IMAGEN_BLOQUE3]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
                           <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>YO, CONTRADICCION ANDANTE</h4>
@@ -313,7 +314,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                         {/* Bloque 4: texto izquierda, imagen derecha (REEMPLAZAR) */}
                         <div style={{ display: 'flex', gap: 16, alignItems: 'stretch', flexWrap: 'wrap', flexDirection: 'row-reverse' }}>
                           <div style={{ flex: '1 1 280px' }}>
-                            <img src="/images/REEMPLAZA_IMAGEN_BLOQUE4.png" alt="[REEMPLAZA_IMAGEN_BLOQUE4]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
+                            <img src={`${BASE}images/REEMPLAZA_IMAGEN_BLOQUE4.png`} alt="[REEMPLAZA_IMAGEN_BLOQUE4]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
                           <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>LIVING IS THE ONLY RUSH, AND YET, WE STILL RUN LATE</h4>
@@ -364,7 +365,7 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                           </li>
                         </ul>
                         <div style={{ textAlign: 'center', marginTop: 16 }}>
-                          <img src="/images/suscribeteyoutube.png" alt={isEs ? 'Suscríbete en YouTube' : 'Subscribe on YouTube'} style={{ maxWidth: 280, width: '100%', height: 'auto' }} />
+                          <img src={`${BASE}images/suscribeteyoutube.png`} alt={isEs ? 'Suscríbete en YouTube' : 'Subscribe on YouTube'} style={{ maxWidth: 280, width: '100%', height: 'auto' }} />
                           <div style={{ marginTop: 8 }}>
                             <a href="https://www.youtube.com/channel/UCGsyq1loldlo3KSDvsni5cA" target="_blank" rel="noopener noreferrer" className="connect-button" style={{ background: '#cc0000' }}>{isEs ? 'AQUI' : 'HERE'}</a>
                           </div>
@@ -511,16 +512,16 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
   };
 
   const mainCards = [
-    { image: "/images/home2.png", title: t.exploreTitle, text: t.exploreText, button: t.explore, section: 'explore' },
-    { image: "/images/home3.png", title: t.connectTitle, text: t.connectText, button: t.connect, section: 'connect' },
-    { image: "/images/home4.png", title: t.transformTitle, text: t.transformText, button: t.transform, section: 'transform' },
+    { image: `${BASE}images/home2.png`, title: t.exploreTitle, text: t.exploreText, button: t.explore, section: 'explore' },
+    { image: `${BASE}images/home3.png`, title: t.connectTitle, text: t.connectText, button: t.connect, section: 'connect' },
+    { image: `${BASE}images/home4.png`, title: t.transformTitle, text: t.transformText, button: t.transform, section: 'transform' },
   ];
 
   const subCards = [
-    { image: "/images/home5.png", title: t.knowTitle, text: t.knowText, button: t.connect, section: 'connect' },       // Conóceme -> Conecta
-    { image: "/images/home6.png", title: t.feedbackTitle, text: t.feedbackText, button: t.transform, section: 'transform' }, // Opina -> Transforma
-    { image: "/images/home7.png", title: t.buildTitle, text: t.buildText, button: t.explore, section: 'explore' },     // Construir -> redirige a Explora (Aprende oculto)
-    { image: "/images/home8.png", title: t.reflectTitle, text: t.reflectText, button: t.explore, section: 'explore' }, // Reflexionar -> Explora
+    { image: `${BASE}images/home5.png`, title: t.knowTitle, text: t.knowText, button: t.connect, section: 'connect' },       // Conóceme -> Conecta
+    { image: `${BASE}images/home6.png`, title: t.feedbackTitle, text: t.feedbackText, button: t.transform, section: 'transform' }, // Opina -> Transforma
+    { image: `${BASE}images/home7.png`, title: t.buildTitle, text: t.buildText, button: t.explore, section: 'explore' },     // Construir -> redirige a Explora (Aprende oculto)
+    { image: `${BASE}images/home8.png`, title: t.reflectTitle, text: t.reflectText, button: t.explore, section: 'explore' }, // Reflexionar -> Explora
   ];
 
   const renderHome = () => (
@@ -558,7 +559,7 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
         </div>
         <div className="image-container">
           <a href="https://www.entrepalabrasurgentes.com/animik-interactivo/el-tiempo-viajar-entre-el-ayer-y-el-ma%C3%B1ana" target="_blank" rel="noopener noreferrer">
-            <img className="half-image" src="/images/home1.png" alt="Ilustración" />
+            <img className="half-image" src={`${BASE}images/home1.png`} alt="Ilustración" />
           </a>
         </div>
         <div className="video-container fade-in">
@@ -620,7 +621,7 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
           <div style={{ width: '100%', background: '#24668e', marginTop: 20 }}>
             <div className="container" style={{ maxWidth: 1100, paddingTop: 18, paddingBottom: 18 }}>
               <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-                <img src="/images/transforma01.png" alt="Transforma" style={{ width: 280, maxWidth: '100%', height: 'auto', borderRadius: 8, background: '#fff', flex: '0 0 auto' }} />
+                <img src={`${BASE}images/transforma01.png`} alt="Transforma" style={{ width: 280, maxWidth: '100%', height: 'auto', borderRadius: 8, background: '#fff', flex: '0 0 auto' }} />
                 <div style={{ flex: '1 1 320px', color: '#fff', fontSize: '1.25rem', lineHeight: 1.6 }}>
                   {language === 'es'
                     ? 'Transformar es un viaje interior: un movimiento sutil que convierte las cicatrices en aprendizajes y las dudas en caminos. Cada emoción que sentimos nos invita a mirarnos con valentía, a soltar lo que pesa y a cultivar lo que nos hace florecer. La verdadera transformación no viene de afuera, nace en nuestra decisión de reescribirnos cada día, de reconocernos como autores de nuestro propio bienestar.'
@@ -632,7 +633,7 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
               <div style={{ marginTop: 16 }}>
                 <div style={{ background: '#dd566f', borderRadius: 12, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.12)' }}>
                   <div style={{ textAlign: 'center' }}>
-                    <img src="/images/logo_animikdemi.png" alt="AnImiKdemi" style={{ width: 200, maxWidth: '80%', height: 'auto', display: 'block', margin: '0 auto 10px' }} />
+                    <img src={`${BASE}images/logo_animikdemi.png`} alt="AnImiKdemi" style={{ width: 200, maxWidth: '80%', height: 'auto', display: 'block', margin: '0 auto 10px' }} />
                   </div>
                   <div style={{ background: '#fff', borderRadius: 10, padding: 12 }}>
                     <h2 className="section-title" style={{ color: '#dd566f', fontWeight: 800, margin: '0 0 8px 0' }}>
@@ -670,7 +671,7 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
             {language === 'es' ? 'Entrar al MicroLearning Gratuito' : 'Enter the Free MicroLearning'}
           </h2>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
-            <img src="/images/modulocurso1.png" alt="Módulo 1" style={{ width: '100%', maxWidth: 900, height: 'auto', borderRadius: 8, boxShadow: '0 6px 16px rgba(0,0,0,.12)' }} />
+            <img src={`${BASE}images/modulocurso1.png`} alt="Módulo 1" style={{ width: '100%', maxWidth: 900, height: 'auto', borderRadius: 8, boxShadow: '0 6px 16px rgba(0,0,0,.12)' }} />
           </div>
           <div style={{ background: 'var(--brand-light-bg)', borderRadius: 10, padding: 16, boxShadow: '0 6px 16px rgba(0,0,0,.08)' }}>
             <h3 className="section-title" style={{ textAlign: 'center', marginBottom: 8 }}>
