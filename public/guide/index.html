@@ -522,27 +522,19 @@
             aiSubmitButton.disabled = true;
 
             try {
-                // Aquí debes poner tu clave de OpenAI (obtenida en https://platform.openai.com/)
-                const apiKey = "REDACTED"; 
-                // Endpoint oficial de OpenAI para Chat Completions
-                const apiUrl = 'https://api.openai.com/v1/chat/completions';
+                // Llamada al backend de la web (proxy seguro) en lugar de usar una API Key en el cliente
+                const apiUrl = '/api/chat';
 
                 const payload = {
-                    model: "gpt-3.5-turbo", // Puedes cambiar por “gpt-4” si fuese accesible en tu cuenta
                     messages: [
                         { role: "system", content: systemMessage },
                         { role: "user", content: userQueryForAI }
                     ]
                 };
-                
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                };
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: headers,
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
