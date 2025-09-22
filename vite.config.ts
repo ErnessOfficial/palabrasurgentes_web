@@ -329,6 +329,7 @@ export default defineConfig(({ command, mode }) => {
     ? { '/api': { target: process.env.DEV_API_PROXY, changeOrigin: true } }
     : undefined
   return {
+    base: process.env.VITE_BASE || '/palabrasurgentes_web/',
     plugins: [react(), serveAndCopyArticulos()],
     server: { port: 5173, open: true, proxy },
     preview: { port: 5173, open: true, proxy },
