@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Guiado de Mindfulness</title>
+    <link rel="stylesheet" href="/article-tailwind.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid #e2e8f0;
+        }
+        .button-primary {
+            background-image: linear-gradient(to right, #4CAF50 0%, #689F38 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+        }
+        .button-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2);
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 1.5rem;
+            height: 1.5rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message-box {
+            background-color: #e0f2f7;
+            color: #0288d1;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            text-align: left;
+            border: 1px solid #b3e5fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Logo" style="width: 100%; max-width: 400px; margin: 0 auto 2rem; display: block;">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Ejercicio Guiado de Mindfulness</h1>
+        <p class="text-gray-600 mb-8">Busca un lugar tranquilo y regalate un momento. Haz clic en el botón para escuchar y comenzar el ejercicio - Duracion: 2min 30 seg.</p>
+        <button id="playButton" class="button-primary">
+            <span id="buttonText">Reproducir</span>
+            <div id="loadingSpinner" class="loading-spinner hidden"></div>
+        </button>
+        <div id="messageBox" class="message-box hidden"></div>
+        <a href="https://www.entrepalabrasurgentes.com" class="button-primary" style="margin-top: 2rem; text-decoration: none; display: inline-block;">Volver a la Lista de Contenidos</a>
+    </div>
+
+    <script type="module">
+        // Helper function to convert base64 to ArrayBuffer
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // Helper function to convert PCM to WAV format
+        function pcmToWav(pcmData, sampleRate) {
+            const numChannels = 1;
+            const bytesPerSample = 2; // 16-bit PCM
+            const blockAlign = numChannels * bytesPerSample;
+            const byteRate = sampleRate * blockAlign;
+
+            const wavBuffer = new ArrayBuffer(44 + pcmData.byteLength);
+            const view = new DataView(wavBuffer);
+
+            // RIFF chunk
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + pcmData.byteLength, true); // ChunkSize
+            writeString(view, 8, 'WAVE');
+
+            // FMT chunk
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
+            view.setUint16(20, 1, true); // AudioFormat (1 for PCM)
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, 16, true); // BitsPerSample
+
+            // DATA chunk
+            writeString(view, 36, 'data');
+            view.setUint32(40, pcmData.byteLength, true); // Subchunk2Size
+
+            // Write PCM data
+            const pcmBytes = new Uint8Array(pcmData);
+            for (let i = 0; i < pcmBytes.length; i++) {
+                view.setUint8(44 + i, pcmBytes[i]);
+            }
+
+            return new Blob([wavBuffer], { type: 'audio/wav' });
+        }
+
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        const playButton = document.getElementById('playButton');
+        const buttonText = document.getElementById('buttonText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const messageBox = document.getElementById('messageBox');
+
+        let currentAudioInstance = null; // Holds the Audio object for speech
+        let backgroundMusicAudio = null; // HTMLAudioElement for the MP3 file
+        let audioContext = null;
+        let gainNode = null;
+        let isPlayingSequence = false; // Flag to manage the overall sequence state
+
+        // Volume levels for the background music
+        const MUSIC_VOLUME_LOW = 0.1; // Lower volume for voice over music
+        const MUSIC_VOLUME_HIGH = 0.4; // Higher volume during silent minute
+
+        async function playVoiceOver() {
+            if (isPlayingSequence) {
+                // User clicked to stop the sequence
+                if (currentAudioInstance) {
+                    currentAudioInstance.pause();
+                    currentAudioInstance.currentTime = 0;
+                }
+                if (backgroundMusicAudio) {
+                    backgroundMusicAudio.pause();
+                    backgroundMusicAudio.currentTime = 0;
+                }
+                if (audioContext) {
+                    audioContext.close();
+                    audioContext = null;
+                    gainNode = null;
+                }
+                currentAudioInstance = null;
+                backgroundMusicAudio = null;
+                isPlayingSequence = false;
+                buttonText.textContent = 'Reproducir';
+                playButton.classList.remove('bg-green-700');
+                loadingSpinner.classList.add('hidden');
+                playButton.disabled = false;
+                return;
+            }
+
+            // Start playing the sequence
+            isPlayingSequence = true;
+            buttonText.textContent = 'Cargando...';
+            loadingSpinner.classList.remove('hidden');
+            playButton.disabled = true; // Disable until first audio starts or error
+            messageBox.classList.add('hidden');
+
+            const scriptTextPart1 = `
+                Hola. Antes de empezar, te recomiendo usar auriculares para que la experiencia sea mejor.
+
+                Te invito a encontrar un espacio tranquilo y una postura cómoda. Puedes sentarte en una silla con la espalda recta y los pies en el suelo, o acostarte si lo prefieres. Pon tus manos de forma simétrica sobre tu regazo o tu abdomen.
+
+                Si te sientes cómodo, puedes cerrar los ojos suavemente... Si no, simplemente mantén una mirada relajada y desenfocada.
+
+                Puedes pausar este audio mientras te preparas, y reanudarlo cuando quieras empezar...
+
+                Ya está todo listo para regalarte un valioso minuto... Este minuto comenzará ahora.
+            `;
+
+            const scriptTextPart2 = `
+                Y ahora, con suavidad, abre los ojos y toma un momento para notar cómo te sientes. Observa si hay algún cambio en tu cuerpo, en tu estado de ánimo o en tu claridad mental. No hay una forma correcta o incorrecta de sentirte. Simplemente observa tu experiencia.
+
+                Este ejercicio, aunque breve, es una introducción poderosa al mindfulness. Puedes repetirlo en cualquier momento y lugar que necesites un descanso mental.
+
+                La práctica regular, incluso en periodos tan cortos, es la clave para obtener todos sus beneficios. Te invito a hacer este ejercicio tan a menudo como puedas.
+            `;
+
+            try {
+                // Initialize Web Audio API for background music
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                backgroundMusicAudio = new Audio('mindfulnessaudio.mp3'); // Path to the MP3 file
+                backgroundMusicAudio.loop = true; // Loop the music
+                backgroundMusicAudio.autoplay = false; // We'll start it manually
+
+                const sourceNode = audioContext.createMediaElementSource(backgroundMusicAudio);
+                gainNode = audioContext.createGain();
+
+                sourceNode.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                // Set initial low volume for music and play it
+                gainNode.gain.setValueAtTime(MUSIC_VOLUME_LOW, audioContext.currentTime);
+                backgroundMusicAudio.play().catch(e => console.error("Error playing background music:", e));
+
+
+                // --- Generate and play Part 1 (voice over low music) ---
+                currentAudioInstance = await generateAudioAndGetPlayer(scriptTextPart1, "Achernar"); // Usando Achernar para una voz más calmada
+                playButton.disabled = false; // Enable play button to allow stopping
+                playButton.classList.add('bg-green-700');
+                buttonText.textContent = 'Pausar';
+
+                await new Promise((resolve, reject) => {
+                    currentAudioInstance.onended = resolve;
+                    currentAudioInstance.onerror = reject;
+                });
+
+                if (!isPlayingSequence) return; // If user stopped during Part 1
+
+                // --- Increase music volume for 1 minute (voice silence) ---
+                gainNode.gain.linearRampToValueAtTime(MUSIC_VOLUME_HIGH, audioContext.currentTime + 1); // Smooth transition
+                buttonText.textContent = 'Meditando...';
+
+                await new Promise(resolve => setTimeout(resolve, 60 * 1000)); // 1 minute silence
+
+                if (!isPlayingSequence) return; // If user stopped during ambient tone
+
+                // --- Decrease music volume and play Part 2 ---
+                gainNode.gain.linearRampToValueAtTime(MUSIC_VOLUME_LOW, audioContext.currentTime + 1); // Smooth transition back to low
+                buttonText.textContent = 'Pausar'; // Re-confirm button text
+
+                currentAudioInstance = await generateAudioAndGetPlayer(scriptTextPart2, "Achernar"); // Usando Achernar para una voz más calmada
+
+                await new Promise((resolve, reject) => {
+                    currentAudioInstance.onended = resolve;
+                    currentAudioInstance.onerror = reject;
+                });
+
+            } catch (error) {
+                console.error('Error al generar o reproducir el audio:', error);
+                messageBox.textContent = `Error: ${error.message}. Por favor, inténtalo de nuevo.`;
+                messageBox.classList.remove('hidden');
+            } finally {
+                // Always reset state after sequence finishes or errors
+                isPlayingSequence = false;
+                loadingSpinner.classList.add('hidden');
+                playButton.disabled = false;
+                playButton.classList.remove('bg-green-700');
+                buttonText.textContent = 'Reproducir';
+
+                if (currentAudioInstance) {
+                    currentAudioInstance.pause();
+                    currentAudioInstance.currentTime = 0;
+                    currentAudioInstance = null;
+                }
+                if (backgroundMusicAudio) {
+                    backgroundMusicAudio.pause();
+                    backgroundMusicAudio.currentTime = 0;
+                    backgroundMusicAudio = null;
+                }
+                if (audioContext) {
+                    audioContext.close();
+                    audioContext = null;
+                    gainNode = null;
+                }
+            }
+        }
+
+        // Helper function to generate and play audio from TTS API
+        async function generateAudioAndGetPlayer(text, voiceName) {
+            const payload = {
+                contents: [{ parts: [{ text: text }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: voiceName }
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            // ¡IMPORTANTE! Tu clave API de Google Cloud ha sido insertada aquí:
+            const apiKey = "AIzaSyAFjJtdB0nB9VUkTTxa6shwkoY2zIlWVb0"; 
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+            let response;
+            let retries = 0;
+            const maxRetries = 5;
+            const initialDelay = 1000; // 1 second
+
+            while (retries < maxRetries) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429) { // Too Many Requests
+                        const delay = initialDelay * Math.pow(2, retries) + Math.random() * 1000; // Exponential backoff with jitter
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        retries++;
+                    } else if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status} - ${await response.text()}`);
+                    } else {
+                        break; // Success
+                    }
+                } catch (error) {
+                    if (retries === maxRetries - 1) throw error; // Re-throw on last attempt
+                    const delay = initialDelay * Math.pow(2, retries) + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    retries++;
+                }
+            }
+
+            const result = await response.json();
+            const part = result?.candidates?.[0]?.content?.parts?.[0];
+            const audioData = part?.inlineData?.data;
+            const mimeType = part?.inlineData?.mimeType;
+
+            if (audioData && mimeType && mimeType.startsWith("audio/L16")) {
+                const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000; // Default to 16kHz if not found
+
+                const pcmData = base64ToArrayBuffer(audioData);
+                const wavBlob = pcmToWav(pcmData, sampleRate);
+                const audioUrl = URL.createObjectURL(wavBlob);
+                const newAudio = new Audio(audioUrl);
+                newAudio.play();
+                return newAudio;
+            } else {
+                throw new Error("No se pudo obtener datos de audio válidos de la API.");
+            }
+        }
+
+        playButton.addEventListener('click', playVoiceOver);
+    </script>
+</body>
+</html>
