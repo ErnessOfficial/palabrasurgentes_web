@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: Juego de la Autoestima</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff1f2; /* Light rose background */
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card {
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            border: 3px solid transparent;
+            height: 12rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 1.5rem;
+        }
+        .card.selected {
+            transform: scale(1.05);
+            border-color: #fb7185; /* Rose-400 */
+        }
+        .card.matched {
+            cursor: default;
+            border-color: #4ade80; /* Green-400 */
+            background-color: #f0fdf4; /* Green-50 */
+            opacity: 0.7;
+        }
+        .card.shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .icon-container {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Encabezado -->
+        <header class="text-center mb-12 fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold text-rose-800 mb-3">Quinta Estación: Autoestima</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Aprende a identificar las señales de una autoestima frágil y conéctalas con el pilar que la fortalece.</p>
+        </header>
+
+        <!-- Juego -->
+        <main class="fade-in" style="animation-delay: 0.2s;">
+            <div id="game-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <!-- Columna de Indicadores -->
+                <div>
+                    <h2 class="text-2xl font-bold text-center mb-4 text-red-600">Indicadores de Autoestima Frágil</h2>
+                    <div id="indicators-list" class="space-y-4">
+                        <!-- Indicator cards will be injected here -->
+                    </div>
+                </div>
+                <!-- Columna de Pilares -->
+                <div>
+                    <h2 class="text-2xl font-bold text-center mb-4 text-green-600">Pilares para Fortalecerla</h2>
+                    <div id="pillars-list" class="space-y-4">
+                        <!-- Pillar cards will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Modal de Éxito -->
+        <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-60 flex-col items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-sm mx-auto">
+                <div class="text-green-500 mb-4">
+                    <svg class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">¡Lo lograste!</h2>
+                <p class="text-gray-600 mb-6">Has conectado todas las piezas para construir una autoestima más fuerte. ¡Sigue practicando estos pilares!</p>
+                <button onclick="initializeGame()" class="bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-green-700 transition-colors">
+                    Jugar de Nuevo
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const gameData = [
+            { id: 1, indicator: "Pensamiento 'todo o nada' y diálogo interno negativo.", pillar: "Diálogo Interno Positivo", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>` },
+            { id: 2, indicator: "Rechazar cumplidos y minimizar los logros.", pillar: "Reconocimiento de Logros", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>` },
+            { id: 3, indicator: "Dificultad para decir 'no' y complacer a los demás.", pillar: "Límites Saludables", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>` },
+            { id: 4, indicator: "Aislarse y dejar de hacer actividades que se disfrutan.", pillar: "Autocuidado", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h6M9 12h6m-6 5.25h6M5.25 6h.008v.008H5.25V6zm.75 4.5h.008v.008H6v-4.5zm0 4.5h.008v.008H6v-4.5z" /></svg>` },
+            { id: 5, indicator: "Ser demasiado autocrítico y no perdonarse los errores.", pillar: "Autocompasión", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>` }
+        ];
+
+        const indicatorsContainer = document.getElementById('indicators-list');
+        const pillarsContainer = document.getElementById('pillars-list');
+        const successModal = document.getElementById('success-modal');
+
+        let firstCard = null, secondCard = null;
+        let lockBoard = false;
+        let matchedPairs = 0;
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function createCard(data, type) {
+            const card = document.createElement('div');
+            card.classList.add('card', 'bg-white', 'shadow-md', 'text-center');
+            card.dataset.id = data.id;
+            card.dataset.type = type;
+
+            if (type === 'indicator') {
+                card.innerHTML = `<p class="text-gray-700 font-semibold">${data.indicator}</p>`;
+            } else {
+                card.innerHTML = `
+                    <div class="icon-container text-rose-500">${data.icon}</div>
+                    <h3 class="text-lg font-bold text-rose-800">${data.pillar}</h3>
+                `;
+            }
+            card.addEventListener('click', handleCardClick);
+            return card;
+        }
+
+        function initializeGame() {
+            indicatorsContainer.innerHTML = '';
+            pillarsContainer.innerHTML = '';
+            matchedPairs = 0;
+            successModal.classList.add('hidden');
+            
+            const shuffledIndicators = shuffle([...gameData]);
+            const shuffledPillars = shuffle([...gameData]);
+
+            shuffledIndicators.forEach(data => indicatorsContainer.appendChild(createCard(data, 'indicator')));
+            shuffledPillars.forEach(data => pillarsContainer.appendChild(createCard(data, 'pillar')));
+        }
+
+        function handleCardClick(e) {
+            if (lockBoard) return;
+            const clickedCard = e.currentTarget;
+            if (clickedCard === firstCard || clickedCard.classList.contains('matched')) return;
+
+            clickedCard.classList.add('selected');
+
+            if (!firstCard) {
+                firstCard = clickedCard;
+            } else {
+                if (firstCard.dataset.type === clickedCard.dataset.type) {
+                    firstCard.classList.remove('selected');
+                    firstCard = clickedCard;
+                    return;
+                }
+                secondCard = clickedCard;
+                lockBoard = true;
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const isMatch = firstCard.dataset.id === secondCard.dataset.id;
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.classList.add('matched');
+            secondCard.classList.add('matched');
+            matchedPairs++;
+            resetBoard();
+            
+            if (matchedPairs === gameData.length) {
+                setTimeout(() => {
+                    successModal.style.display = 'flex';
+                }, 500);
+            }
+        }
+
+        function unflipCards() {
+            firstCard.classList.add('shake');
+            secondCard.classList.add('shake');
+            setTimeout(() => {
+                firstCard.classList.remove('selected', 'shake');
+                secondCard.classList.remove('selected', 'shake');
+                resetBoard();
+            }, 800);
+        }
+
+        function resetBoard() {
+            [firstCard, secondCard, lockBoard] = [null, null, false];
+        }
+
+        initializeGame();
+    </script>
+</body>
+</html>

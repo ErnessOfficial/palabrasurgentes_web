@@ -1,0 +1,33 @@
+{
+  "name": "entrepalabrasurgentes-vite",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "predev": "npm run build:articles-css",
+    "dev": "vite",
+    "build": "npm run build:articles-css && vite build",
+    "preview": "vite preview",
+    "gen:public-en": "node scripts/gen-public-en.js",
+    "build:articles-css": "tailwindcss -i scripts/article-tailwind.input.css -o public/article-tailwind.css --minify --content \"Articulos/**/*.html\""
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.4",
+    "vite": "^7.1.5"
+  }
+}

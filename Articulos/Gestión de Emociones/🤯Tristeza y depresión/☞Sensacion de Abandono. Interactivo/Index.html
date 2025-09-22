@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Sensación de Abandono - Animik</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #3b003f, #000);
+      color: #e8d9ff;
+      font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    h1, h2 {
+      color: #ffb3ff;
+    }
+    button {
+      background-color: #b266ff;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #9933ff;
+    }
+    .section {
+      display: none;
+      margin-top: 20px;
+    }
+    #logo {
+      max-width: 220px;
+      margin-bottom: 30px;
+    }
+    .content {
+      max-width: 800px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <img id="logo" src="Logo-animik.png" alt="Animik">
+  <div class="content">
+    <h1>La Sensación de Abandono</h1>
+    <p>Hola, esta presentación ha sido creada para ti. Sí, para ti, que estás sintiendo una desconexión profunda, como si te hubieran dejado solo en medio del ruido del mundo.</p>
+
+    <button onclick="showSection('definicion')">¿Qué es la sensación de abandono?</button>
+    <button onclick="showSection('manifestaciones')">¿Cómo se manifiesta?</button>
+    <button onclick="showSection('ejercicios')">Ejercicios de reflexión</button>
+    <button onclick="showSection('herramientas')">Herramientas para canalizar</button>
+    <button onclick="showSection('cierre')">Mensaje final</button>
+
+    <div id="definicion" class="section">
+      <h2>¿Qué es?</h2>
+      <p>La sensación de abandono es una emoción profunda que aparece cuando sentimos que hemos sido dejados atrás, ignorados o excluidos, ya sea física o emocionalmente. Puede venir de la infancia, de relaciones, o incluso de expectativas no cumplidas.</p>
+    </div>
+
+    <div id="manifestaciones" class="section">
+      <h2>¿Cómo se manifiesta?</h2>
+      <p>Puede sentirse como un vacío en el pecho, ansiedad ante la idea de estar solo, miedo constante al rechazo, dificultad para confiar, o una necesidad extrema de aprobación. Se expresa en pensamientos como "no soy suficiente" o "nadie se quedará conmigo".</p>
+    </div>
+
+    <div id="ejercicios" class="section">
+      <h2>Ejercicios de reflexión</h2>
+      <ul style="text-align: left">
+        <li><strong>Escribe una carta:</strong> Dirígela a la persona (real o simbólica) de quien sientes abandono. No tienes que enviarla. Solo expresa.</li>
+        <li><strong>Diálogo interno:</strong> Cierra los ojos y conversa contigo mismo como si fueras tu mejor amigo. ¿Qué te dirías?</li>
+        <li><strong>Mapa emocional:</strong> Dibuja tu cuerpo y marca dónde sientes el abandono. ¿Qué forma tiene? ¿Color? ¿Movimiento?</li>
+      </ul>
+    </div>
+
+    <div id="herramientas" class="section">
+      <h2>Herramientas para canalizar</h2>
+      <ul style="text-align: left">
+        <li><strong>Mindfulness:</strong> Practica ejercicios de respiración. Siente tu cuerpo aquí y ahora.</li>
+        <li><strong>Red de apoyo:</strong> Conecta con alguien de confianza, aunque solo sea para compartir cómo te sientes.</li>
+        <li><strong>Afirmaciones:</strong> Repite frases como: "No estoy solo, me tengo a mí", "Soy digno de amor y compañía".</li>
+        <li><strong>Movimiento:</strong> Sal a caminar. El cuerpo en movimiento ayuda a desbloquear emociones estancadas.</li>
+      </ul>
+    </div>
+
+    <div id="cierre" class="section">
+      <h2>Una ventana de claridad</h2>
+      <p>Lo que sientes es válido. No estás solo. Esta sensación no define quién eres, ni será tu estado permanente. Cada emoción trae un mensaje. Escúchala, abrázala. Este viaje es tuyo, pero aquí tienes un mapa, una guía, y un abrazo simbólico de quienes creemos que sanar es posible.</p>
+    </div>
+  </div>
+
+  <script>
+    function showSection(id) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => section.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+  </script>
+</body>
+</html>

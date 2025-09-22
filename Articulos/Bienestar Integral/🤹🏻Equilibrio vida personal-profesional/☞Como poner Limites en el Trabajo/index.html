@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infografía Interactiva - Límites en el Trabajo</title>
+  <link rel="stylesheet" href="/article-tailwind.css">
+</head>
+<body class="bg-gradient-to-b from-indigo-100 to-white min-h-screen text-gray-800 font-sans">
+
+  <header class="text-center py-10">
+    <img src="microcursos.png" alt="Logo2 AnImiKdemi" style="display: block; margin-left: auto; margin-right: auto; max-width: 500px;">
+    <h1 class="text-3xl font-bold text-indigo-700 mb-2">📘 Cómo poner límites en el trabajo</h1>
+    <p class="text-lg text-gray-600 italic">…sin perder la cercanía</p>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-6 space-y-6">
+    <!-- Checklist -->
+    <section class="bg-white rounded-2xl shadow-md p-6">
+      <button onclick="toggleSection('checklist')" class="w-full text-left flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-indigo-600">✅ Checklist rápido</h2>
+        <span id="icon-checklist">+</span>
+      </button>
+      <div id="checklist" class="hidden mt-4 space-y-2 text-gray-700">
+        <p>✔️ Agradecí primero</p>
+        <p>✔️ Específico (horarios, plazos, canales)</p>
+        <p>✔️ Ofrezco alternativas</p>
+        <p>✔️ Propongo revisión</p>
+        <p>✔️ Mantengo tono cordial</p>
+      </div>
+    </section>
+
+    <!-- Scripts -->
+    <section class="bg-white rounded-2xl shadow-md p-6">
+      <button onclick="toggleSection('scripts')" class="w-full text-left flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-indigo-600">💬 Scripts listos</h2>
+        <span id="icon-scripts">+</span>
+      </button>
+      <div id="scripts" class="hidden mt-4 space-y-3">
+        <p><strong>👉 A tu jefe:</strong> “Gracias por confiarme esto. Para asegurar calidad, propongo ventana 8:30–18:30 + protocolo de urgencias…”</p>
+        <p><strong>👉 A colega:</strong> “Quiero ayudar. Para encajarlo, ¿qué quitamos o movemos?”</p>
+        <p><strong>👉 A cliente:</strong> “Me encanta la idea. Supera alcance inicial: (a) ampliar plazo/presupuesto o (b) fase 2.”</p>
+        <p><strong>👉 Chat fuera de horario:</strong> “Te respondo mañana. Si es crítico, usa canal de emergencias.”</p>
+      </div>
+    </section>
+
+    <!-- Método DESC -->
+    <section class="bg-white rounded-2xl shadow-md p-6">
+      <button onclick="toggleSection('desc')" class="w-full text-left flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-indigo-600">🧩 Método DESC (rápido)</h2>
+        <span id="icon-desc">+</span>
+      </button>
+      <div id="desc" class="hidden mt-4 space-y-2">
+        <p><strong>D</strong>escribe: “Ayer a las 22:40 llegó X…”</p>
+        <p><strong>E</strong>xpresa: “…me quitó descanso y aumentó mi ansiedad.”</p>
+        <p><strong>S</strong>ugiere: “Propongo ventana 8:30–18:30 y canal único de urgencias.”</p>
+        <p><strong>C</strong>onsensa: “Lo probamos 14 días y revisamos con datos.”</p>
+      </div>
+    </section>
+
+    <!-- Plan 14 días -->
+    <section class="bg-white rounded-2xl shadow-md p-6">
+      <button onclick="toggleSection('plan')" class="w-full text-left flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-indigo-600">📆 Plan 14 días</h2>
+        <span id="icon-plan">+</span>
+      </button>
+      <div id="plan" class="hidden mt-4 text-gray-700">
+        <ol class="list-decimal ml-6 space-y-1">
+          <li>Día 1–2: mapa de límites</li>
+          <li>Día 3: elige 1 de tiempo + 1 de comunicación</li>
+          <li>Día 4–5: activa estado en chat y reglas de correo</li>
+          <li>Día 6: mini-reunión “ventanas/urgencias”</li>
+          <li>Día 7: aplica DESC en 1 petición</li>
+          <li>Día 8–9: convierte 1 reunión a asíncrona</li>
+          <li>Día 10–12: revisa prioridades con tu jefe</li>
+          <li>Día 13: autoevaluación energía/sueño</li>
+          <li>Día 14: retro y nuevo hábito</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Señales de éxito -->
+    <section class="bg-white rounded-2xl shadow-md p-6">
+      <button onclick="toggleSection('success')" class="w-full text-left flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-indigo-600">🌟 Señales de éxito</h2>
+        <span id="icon-success">+</span>
+      </button>
+      <div id="success" class="hidden mt-4 space-y-2">
+        <p>🔹 Menos “urgencias falsas”</p>
+        <p>🔹 Más descanso y energía</p>
+        <p>🔹 Agenda con bloques respetados</p>
+        <p>🔹 Clima más sereno en el equipo</p>
+        <p>🔹 Entregas con menos re-trabajo</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-gray-500 py-6">
+    <p>✨ Recuerda: “Poner límites no enfría la relación; la hace sostenible.”</p>
+  </footer>
+
+  <script>
+    function toggleSection(id) {
+      const section = document.getElementById(id);
+      const icon = document.getElementById("icon-" + id);
+      section.classList.toggle("hidden");
+      icon.textContent = section.classList.contains("hidden") ? "+" : "−";
+    }
+  </script>
+</body>
+</html>
