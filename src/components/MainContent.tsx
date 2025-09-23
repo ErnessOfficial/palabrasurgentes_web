@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { translationsEs, translationsEn } from '../translations';
 import FlipCard from './FlipCard';
@@ -94,6 +95,13 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
   ] as const;
 
   const [activeModule, setActiveModule] = React.useState<null | typeof cards[number]['id']>(null);
+  const loc = useLocation();
+  React.useEffect(() => {
+    const m = (loc.hash || '').match(/^#connect:([a-zA-Z0-9_-]+)/);
+    if (m && (['musica','escritura','migrar','vocacional'] as const).includes(m[1] as any)) {
+      setActiveModule(m[1] as any);
+    }
+  }, [loc.hash]);
 
   const quizTitle = isEs ? '🎭 ¿Con qué versión de mí conectas más?' : '🎭 Which version of me do you connect with most?';
   const quizText = isEs
@@ -518,10 +526,39 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
   ];
 
   const subCards = [
-    { image: `${BASE}images/home5.png`, title: t.knowTitle, text: t.knowText, button: t.connect, section: 'connect' },       // Conóceme -> Conecta
-    { image: `${BASE}images/home6.png`, title: t.feedbackTitle, text: t.feedbackText, button: t.transform, section: 'transform' }, // Opina -> Transforma
-    { image: `${BASE}images/home7.png`, title: t.buildTitle, text: t.buildText, button: t.explore, section: 'explore' },     // Construir -> redirige a Explora (Aprende oculto)
-    { image: `${BASE}images/home8.png`, title: t.reflectTitle, text: t.reflectText, button: t.explore, section: 'explore' }, // Reflexionar -> Explora
+    // CONOCER -> CONOCEME
+    {
+      image: `${BASE}images/home5.png`,
+      title: language === 'es' ? 'CONOCEME' : 'GET TO KNOW ME',
+      text: language === 'es'
+        ? 'Mi nombre es Ernesto Mendoza, la  mente y el corazón detrás de Entre Palabras Urgentes. Quizás conociendo un poco mi esencia  y la profunda inspiración que dio vida a esta plataforma encuentres ese punto en el que estoy seguro que conectaremos. Aquí, no solo conocerás mi historia personal y los valores que la sustentan, sino también la visión completa  que da forma a este proyecto dedicado al bienestar emocional desde el aprendizaje critico -reflexivo .'
+        : 'My name is Ernesto Mendoza — the mind and heart behind Entre Palabras Urgentes. By discovering a bit of my essence and the deep inspiration that gave life to this platform, you may find that point where I am sure we will connect. Here you will not only learn about my personal story and the values that sustain it, but also the broader vision shaping this project devoted to emotional well‑being through critical and reflective learning.',
+      button: t.connect,
+      section: 'connect'
+    },
+    // OPINAR -> DESCARGA GRATIS (lleva al módulo Escritura dentro de Conecta)
+    {
+      image: `${BASE}images/home6.png`,
+      title: language === 'es' ? 'DESCARGA GRATIS' : 'FREE DOWNLOAD',
+      text: language === 'es'
+        ? 'Te invito a conocer y disfrutar de las historias que conforman cada uno de los libros que he escrito y que están publicados y disponibles tanto en version ebook en las plataformas de Amazon Kindle y Google Play Books, como en version impresa directamente en la aplicación de compras online de Amazon dentro de la sección de Libros, así que quiero hacerte un regalo muy especial. Entra en esta sección y  descarga totalmente gratis una preview con los primeros capítulos de mis libros y en  en formato .pdf para que puedas leerlo en tu dispositivo móvil, en tu tablet o en tu ordenador como un e-book o como un archivo. Entra en el mundo de mis personajes y  unas historias que van desde la ficción y la fantasía hasta la mas honesta realidad de mi vida.'
+        : 'I invite you to explore and enjoy the stories behind each of my books — available as e‑books on Amazon Kindle and Google Play Books, and also in print on Amazon. As a special gift, in this section you can download for free a preview with the first chapters of my books in PDF format, so you can read it on your mobile device, tablet or computer as an e‑book or a simple file. Step into the world of my characters and stories that range from fiction and fantasy to the most honest reality of my life.',
+      button: language === 'es' ? 'Descarga Gratis' : 'Download Free',
+      section: 'connect',
+      module: 'escritura' as const
+    },
+    // CONSTRUIR -> Construye (redirige a Transforma)
+    {
+      image: `${BASE}images/home7.png`,
+      title: language === 'es' ? 'Construye' : 'Build',
+      text: language === 'es'
+        ? 'Da el primer  paso  para  tu verdadera transformación  construyendo tu propio conocimiento. En un mundo que nos empuja a memorizar y repetir, creemos que el verdadero aprendizaje nace de la reflexión y la experiencia. Cuando el conocimiento se construye desde dentro, se convierte en una parte intrínseca de ti, un hábito natural que aplicas sin esfuerzo. Accede GRATIS al Modulo 1  de Micro-Learning para el Autoconocimiento que desarrollamos con AnImiKdemi.'
+        : 'Take the first step towards your true transformation by building your own knowledge. In a world that pushes us to memorise and repeat, we believe that true learning is born from reflection and experience. When knowledge is built from within, it becomes an intrinsic part of you — a natural habit you apply effortlessly. Get FREE access to Module 1 of the Micro‑Learning for Self‑Knowledge we developed with AnImiKdemi.',
+      button: language === 'es' ? 'Transforma' : 'Transform',
+      section: 'transform'
+    },
+    // REFLEXIONAR (sin cambios de contenido)
+    { image: `${BASE}images/home8.png`, title: t.reflectTitle, text: t.reflectText, button: t.explore, section: 'explore' },
   ];
 
   const renderHome = () => (
@@ -552,7 +589,17 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
               <div className="card-content">
                 <h3 className="card-title">{card.title}</h3>
                 <p className="card-text">{card.text}</p>
-                <button onClick={() => setActiveSection(card.section)} className="card-button">{card.button}</button>
+                <button
+                  onClick={() => {
+                    if ((card as any).module) {
+                      try { window.location.hash = `#connect:${(card as any).module}` } catch {}
+                    }
+                    setActiveSection(card.section)
+                  }}
+                  className="card-button"
+                >
+                  {card.button}
+                </button>
               </div>
             </div>
           ))}
@@ -636,10 +683,10 @@ const MainContent: React.FC<Props> = ({ activeSection, setActiveSection }) => {
                     <img src={`${BASE}images/logo_animikdemi.png`} alt="AnImiKdemi" style={{ width: 200, maxWidth: '80%', height: 'auto', display: 'block', margin: '0 auto 10px' }} />
                   </div>
                   <div style={{ background: '#fff', borderRadius: 10, padding: 12 }}>
-                    <h2 className="section-title" style={{ color: '#dd566f', fontWeight: 800, margin: '0 0 8px 0' }}>
+                    <h2 className="section-title" style={{ color: '#dd566f', fontWeight: 900, fontSize: 'clamp(1.6rem, 5vw, 2.2rem)', margin: '0 0 8px 0' }}>
                       {language === 'es' ? 'Comienza tu Transformación' : 'Start Your Transformation'}
                     </h2>
-                    <p style={{ color: '#fff', fontWeight: 800, fontSize: '1.1rem', lineHeight: 1.6, background: 'transparent', margin: 0 }}>
+                    <p style={{ color: '#dd566f', fontWeight: 700, fontSize: '1.1rem', lineHeight: 1.6, background: 'transparent', margin: 0 }}>
                       {language === 'es'
                         ? 'Da el primer  paso  para  tu verdadera transformación  construyendo tu propio conocimiento. En un mundo que nos empuja a memorizar y repetir, creemos que el verdadero aprendizaje nace de la reflexión y la experiencia. Cuando el conocimiento se construye desde dentro, se convierte en una parte intrínseca de ti, un hábito natural que aplicas sin esfuerzo. Accede GRATIS al Modulo 1  de Micro-Learning para el Autoconocimiento que desarrollamos con AnImiKdemi.'
                         : 'Take the first step towards true transformation by building your own knowledge. In a world that pushes us to memorise and repeat, we believe true learning is born from reflection and experience. When knowledge is constructed from within, it becomes an intrinsic part of you—a natural habit you apply with ease. Get FREE access to Module 1 of Micro‑Learning for Self‑Knowledge that we developed with AnImiKdemi.'}
