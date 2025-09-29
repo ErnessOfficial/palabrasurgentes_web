@@ -469,11 +469,19 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                                 </a>
                               </div>
                             </div>
-                            <div style={{ textAlign: 'right', marginTop: 12 }}>
-                              <button className="card-button" onClick={onBackFromForm}>{isEs ? 'Volver' : 'Back'}</button>
+                          <div style={{ textAlign: 'center', marginTop: 14 }}>
+                            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#24668e' }}>
+                              Gracias por enviar tus datos. El enlace para que realices la descarga segura del archivo .pdf va de camino y estará en la bandeja de entrada de tu correo electrónico en unos minutos. Si no aparece en aprox. 5 minutos, revisa tu carpeta de spam.
+                            </div>
+                            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#24668e', marginTop: 6 }}>
+                              Thank you for submitting your details. The link to securely download the .pdf file is on its way and will arrive in your email inbox within a few minutes. If it doesn’t appear in about 5 minutes, please check your spam folder.
                             </div>
                           </div>
+                          <div style={{ textAlign: 'right', marginTop: 12 }}>
+                            <button className="card-button" onClick={onBackFromForm}>{isEs ? 'Volver' : 'Back'}</button>
+                          </div>
                         </div>
+                      </div>
                       )}
                     </div>
                   )}
