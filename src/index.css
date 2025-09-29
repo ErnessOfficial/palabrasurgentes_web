@@ -8,6 +8,7 @@
 }
 body{margin:0;font-family:'Comfortaa',cursive;background:var(--brand-bg);color:var(--brand-text);}*{box-sizing:border-box}
 .container{max-width:1200px;margin:0 auto;padding:0 20px}.app{display:flex;flex-direction:column;min-height:100vh}
+img{max-width:100%;height:auto}
 .navigation{
   background:var(--brand-nav);
   padding:8px 0;
@@ -111,3 +112,32 @@ body{margin:0;font-family:'Comfortaa',cursive;background:var(--brand-bg);color:v
 .connect-button:hover{background:#1d5677;transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,.15)}
 .connect-separator{height:2px;border-radius:2px;background:linear-gradient(90deg,var(--brand-primary),#dd566f,var(--brand-nav));opacity:.6;margin:10px auto 24px;max-width:1100px}
 .connect-module-img{width:100%;max-width:1100px;border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,.12);display:block;margin:0 auto 16px}
+
+/* Responsive adjustments */
+@media (max-width: 1024px){
+  .container{padding:0 16px}
+}
+
+@media (max-width: 820px){
+  .nav-list{gap:8px}
+  .nav-link{padding:8px 14px}
+  .intro-text{padding:18px}
+  .cards-container{gap:20px}
+  .connect-card-img{height:180px}
+}
+
+@media (max-width: 640px){
+  .container{padding:0 12px}
+  .image-container{margin:20px 0}
+  .half-image{width:100%;min-width:0}
+  .logo-box{width:120px;height:120px}
+  .card-image{height:150px}
+  .connect-card-img{height:160px}
+  .quiz-box{padding:16px}
+  .quote-slider{padding:16px}
+}
+
+/* Embedded form viewport handling on mobile */
+@media (max-width: 640px){
+  #download-form-anchor iframe{height:70vh}
+}
