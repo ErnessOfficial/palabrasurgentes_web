@@ -121,10 +121,10 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
   } as const;
 
   const formUrls: Record<'b1'|'b2'|'b3'|'b4', string> = {
-    b1: 'https://forms.gle/p7UwBdqt3D4549nZ6',
-    b2: 'https://forms.gle/D1yMp9oqbuwZWhdbA',
-    b3: 'https://forms.gle/DGuSv7hJmWkyszPRA',
-    b4: 'https://forms.gle/4y1Kk6o5BHuu2Xxu7',
+    b1: 'https://forms.gle/rqqTp93k2WRs3NKPA',
+    b2: 'https://forms.gle/C2zhANkwQ7QtY6LcA',
+    b3: 'https://forms.gle/NrBbzQtPXDwdCHe98',
+    b4: 'https://forms.gle/mpc7wqNYrndQL9XK6',
   };
 
   const bookTitles: Record<'b1'|'b2'|'b3'|'b4', string> = {

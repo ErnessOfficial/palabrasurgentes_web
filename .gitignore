@@ -20,6 +20,7 @@ pnpm-debug.log*
 
 # Editor folders
 .vscode/
+.vite/
 
 # Coverage/temporary
 coverage/
