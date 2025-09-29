@@ -52,6 +52,51 @@ const IconSoundCloud: React.FC = () => (
 
 // Subcomponent to render Explore section (keeps hooks local and rule-compliant)
 const ExploreSection: React.FC<{ language: 'es' | 'en'; t: any }> = ({ language, t }) => {
+  const [downloadForm, setDownloadForm] = React.useState<null | 'b1'|'b2'|'b3'|'b4'>(null);
+  const lastScrollRef = React.useRef<number>(0);
+  const blockRefs = {
+    b1: React.useRef<HTMLDivElement>(null),
+    b2: React.useRef<HTMLDivElement>(null),
+    b3: React.useRef<HTMLDivElement>(null),
+    b4: React.useRef<HTMLDivElement>(null),
+  };
+
+  const formUrls: Record<'b1'|'b2'|'b3'|'b4', string> = {
+    b1: 'https://forms.gle/p7UwBdqt3D4549nZ6',
+    b2: 'https://forms.gle/D1yMp9oqbuwZWhdbA',
+    b3: 'https://forms.gle/DGuSv7hJmWkyszPRA',
+    b4: 'https://forms.gle/4y1Kk6o5BHuu2Xxu7',
+  };
+
+  const bookTitles: Record<'b1'|'b2'|'b3'|'b4', string> = {
+    b1: 'Lo Unico Urgente es Vivir, aun así, LLegamos Tarde',
+    b2: 'EL ULTIMO SUSPIRO DE LA NUEVA ATLANTIDA',
+    b3: 'YO, CONTRADICCION ANDANTE',
+    b4: 'LIVING IS THE ONLY RUSH, AND YET, WE STILL RUN LATE',
+  };
+
+  const onOpenForm = (key: 'b1'|'b2'|'b3'|'b4') => {
+    try { lastScrollRef.current = window.scrollY; } catch {}
+    setDownloadForm(key);
+    // Scroll to the embedded form container for visibility
+    setTimeout(() => {
+      const el = document.getElementById('download-form-anchor');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0);
+  };
+
+  const onBackFromForm = () => {
+    const key = downloadForm;
+    setDownloadForm(null);
+    setTimeout(() => {
+      if (key && blockRefs[key].current) {
+        blockRefs[key].current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        try { window.scrollTo({ top: lastScrollRef.current || 0, behavior: 'smooth' }); } catch {}
+      }
+    }, 50);
+  };
+
   return (
     <div className="fade-in">
       <div className="hero-bar"><div className="container"><h1 className="hero-title">{t.explore}</h1></div></div>
@@ -289,11 +334,29 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                           <div style={{ flex: '1 1 280px' }}>
                             <img src={`${BASE}images/escriturabloque1.png`} alt="Bloque 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
-                          <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
+                          <div ref={blockRefs.b1} style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>Lo Unico Urgente es Vivir, aun así, LLegamos Tarde</h4>
                             <p style={{ color: '#333' }}>
                               Vivimos atrapados en la urgencia de la vida, en la prisa por encajar, por ser amados, por demostrar que valemos la pena. Pero, en ese afán, muchas veces nos olvidamos de lo más importante: vivir realmente. Lo Único Urgente es Vivir es mucho más que una novela. Es un viaje introspectivo, una exploración profunda de las emociones humanas, del impacto del pasado en nuestra vida presente y de la necesidad de reconciliarnos con nuestra propia historia. A través de los ojos de Lucas, un personaje que enfrenta las heridas de su infancia y las expectativas de la adultez, esta obra invita al lector a detenerse, a reflexionar y a entender que las cicatrices no definen nuestro futuro, sino que pueden ser el punto de partida para una vida más auténtica.
                             </p>
+                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
+                              <a
+                                href="https://www.amazon.es/stores/Ernesto-Mendoza-Maldonado/author/B0DV3HLNTR?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="connect-button"
+                                style={{ background: '#0F7DC2', color: '#fff' }}
+                              >
+                                {isEs ? 'Comprar en Amazon' : 'Buy on Amazon'}
+                              </a>
+                              <button
+                                className="connect-button"
+                                style={{ background: '#10B981', color: '#fff' }}
+                                onClick={() => onOpenForm('b1')}
+                              >
+                                {isEs ? 'Descargar Gratis' : 'Free Download'}
+                              </button>
+                            </div>
                           </div>
                         </div>
 
@@ -302,9 +365,27 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                           <div style={{ flex: '1 1 280px' }}>
                             <img src={`${BASE}images/REEMPLAZA_IMAGEN_BLOQUE2.png`} alt="[REEMPLAZA_IMAGEN_BLOQUE2]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
-                          <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
+                          <div ref={blockRefs.b2} style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>EL ULTIMO SUSPIRO DE LA NUEVA ATLANTIDA</h4>
                             <p style={{ color: '#333' }}>Me entusiasma compartir con ustedes una nueva aventura: una fábula romántica y fantástica donde la Atlántida no es solo un mito perdido, sino un espejo de nuestras propias búsquedas interiores. La Atlántida no murió. Solo aprendió a callar.Y bajo el océano, entre ruinas olvidadas y tecnología flotante, aún respira su último suspiro… esperando a ser escuchado. Una historia de almas gemelas, pero no por profecía. Por elección. Una rebelión donde la magia no lanza rayos, sino que vibra en el corazón. Un romance que no promete eternidades, sino presencia real, aunque duela. El último suspiro de la nueva Atlántida es una novela de romantasy emocional, épica y profundamente humana, que reimagina la fantasía desde lo más íntimo: sentir es la revolución.</p>
+                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
+                              <a
+                                href="https://www.amazon.es/stores/Ernesto-Mendoza-Maldonado/author/B0DV3HLNTR?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="connect-button"
+                                style={{ background: '#0F7DC2', color: '#fff' }}
+                              >
+                                {isEs ? 'Comprar en Amazon' : 'Buy on Amazon'}
+                              </a>
+                              <button
+                                className="connect-button"
+                                style={{ background: '#10B981', color: '#fff' }}
+                                onClick={() => onOpenForm('b2')}
+                              >
+                                {isEs ? 'Descargar Gratis' : 'Free Download'}
+                              </button>
+                            </div>
                           </div>
                         </div>
 
@@ -313,9 +394,27 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                           <div style={{ flex: '1 1 280px' }}>
                             <img src={`${BASE}images/REEMPLAZA_IMAGEN_BLOQUE3.png`} alt="[REEMPLAZA_IMAGEN_BLOQUE3]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
-                          <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
+                          <div ref={blockRefs.b3} style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>YO, CONTRADICCION ANDANTE</h4>
                             <p style={{ color: '#333' }}>Sumérgete en la vida de Martín Acosta Montenegro, un arquitecto madrileño de 38 años que, entre planos, reuniones burocráticas y pinceladas de humor negro, te invita a acompañarlo en un viaje inolvidable por el laberinto de las emociones humanas. Yo, Contradicción Andante: Un Recorrido por el Complejo Mundo de las Emociones, la nueva novela de Ernesto Mendoza Maldonado, te ofrecerá un retrato auténtico y descarnado de la crisis de los cuarenta, la lucha entre idealismo y pragmatismo, y la búsqueda de sentido en una ciudad que nunca deja de exigir más. Un estilo único, un protagonista inolvidable. Martín desarma su propia existencia a través de un monólogo interior que fluctúa entre la rabia visceral, la melancolía más profunda y esa torpe esperanza de creer en el amor. Su voz, cargada de ironía y sarcasmo, actúa como armadura frente a los fracasos y decepciones, pero también se convierte en puente para conectar con el lector: su vulnerabilidad y sus contradicciones resultan extrañamente familiares. Cada capítulo atiende a una emoción distinta (ilusión, frustración, ira, celos, sorpresa, asco, amor), hilvanando reflexiones filosóficas con agudas observaciones sobre la vida moderna y la burocracia capitalina.</p>
+                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
+                              <a
+                                href="https://www.amazon.es/stores/Ernesto-Mendoza-Maldonado/author/B0DV3HLNTR?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="connect-button"
+                                style={{ background: '#0F7DC2', color: '#fff' }}
+                              >
+                                {isEs ? 'Comprar en Amazon' : 'Buy on Amazon'}
+                              </a>
+                              <button
+                                className="connect-button"
+                                style={{ background: '#10B981', color: '#fff' }}
+                                onClick={() => onOpenForm('b3')}
+                              >
+                                {isEs ? 'Descargar Gratis' : 'Free Download'}
+                              </button>
+                            </div>
                           </div>
                         </div>
 
@@ -324,12 +423,59 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
                           <div style={{ flex: '1 1 280px' }}>
                             <img src={`${BASE}images/REEMPLAZA_IMAGEN_BLOQUE4.png`} alt="[REEMPLAZA_IMAGEN_BLOQUE4]" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8, background: '#fff' }} />
                           </div>
-                          <div style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
+                          <div ref={blockRefs.b4} style={{ flex: '1 1 320px', background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
                             <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 10 }}>LIVING IS THE ONLY RUSH, AND YET, WE STILL RUN LATE</h4>
                             <p style={{ color: '#333' }}>This is the English edition of my first book, "Lo Único Urgente es Vivir, y aun asi, Llegamos Tarde" , titled for this edition  "Living is the only Rush, and yet, We Still Run Late," this work channels my deep-seated need to explore, to heal, and to connect. In this story, through an alter-ego and a blend of truth and fiction, I delve into how I've come to understand a fundamental truth: we come into this world with a single, paramount mission – to truly live. This body and this soul are precious loans, and therefore, nothing can be more important than ensuring we care for ourselves, love ourselves, and instead of chasing baseless affections, goals imposed upon us by others, or a thousand other things beyond our control, we must relentlessly pursue our own happiness. So, I invite you to navigate alongside Lucas through a sea of emotions, scars, and ultimately, redemption.</p>
+                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
+                              <a
+                                href="https://www.amazon.es/stores/Ernesto-Mendoza-Maldonado/author/B0DV3HLNTR?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="connect-button"
+                                style={{ background: '#0F7DC2', color: '#fff' }}
+                              >
+                                {isEs ? 'Comprar en Amazon' : 'Buy on Amazon'}
+                              </a>
+                              <button
+                                className="connect-button"
+                                style={{ background: '#10B981', color: '#fff' }}
+                                onClick={() => onOpenForm('b4')}
+                              >
+                                {isEs ? 'Descargar Gratis' : 'Free Download'}
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
+
+                      {/* Módulo de formularios de descarga */}
+                      {downloadForm && (
+                        <div id="download-form-anchor" style={{ marginTop: 18 }}>
+                          <div style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 8px 20px rgba(0,0,0,0.12)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                              <div style={{ fontWeight: 800, fontSize: '1.05rem' }}>
+                                {isEs ? 'Descargar Gratis — ' : 'Free Download — '} {bookTitles[downloadForm]}
+                              </div>
+                              <button className="card-button" onClick={onBackFromForm}>{isEs ? 'Volver' : 'Back'}</button>
+                            </div>
+                            <div style={{ marginTop: 12 }}>
+                              <iframe
+                                title={`Form-${downloadForm}`}
+                                src={`${formUrls[downloadForm]}${formUrls[downloadForm].includes('?') ? '&' : '?'}embedded=true`}
+                                style={{ width: '100%', height: '1100px', border: 'none', borderRadius: 8 }}
+                              />
+                              <div style={{ textAlign: 'center', marginTop: 10 }}>
+                                <a href={formUrls[downloadForm]} target="_blank" rel="noopener noreferrer" className="contact-link">
+                                  {isEs ? 'Si no ves el formulario, ábrelo aquí' : 'If you can’t see the form, open it here'}
+                                </a>
+                              </div>
+                            </div>
+                            <div style={{ textAlign: 'right', marginTop: 12 }}>
+                              <button className="card-button" onClick={onBackFromForm}>{isEs ? 'Volver' : 'Back'}</button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                   {activeModule === 'musica' && (
