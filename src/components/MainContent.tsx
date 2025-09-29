@@ -52,51 +52,6 @@ const IconSoundCloud: React.FC = () => (
 
 // Subcomponent to render Explore section (keeps hooks local and rule-compliant)
 const ExploreSection: React.FC<{ language: 'es' | 'en'; t: any }> = ({ language, t }) => {
-  const [downloadForm, setDownloadForm] = React.useState<null | 'b1'|'b2'|'b3'|'b4'>(null);
-  const lastScrollRef = React.useRef<number>(0);
-  const blockRefs = {
-    b1: React.useRef<HTMLDivElement>(null),
-    b2: React.useRef<HTMLDivElement>(null),
-    b3: React.useRef<HTMLDivElement>(null),
-    b4: React.useRef<HTMLDivElement>(null),
-  };
-
-  const formUrls: Record<'b1'|'b2'|'b3'|'b4', string> = {
-    b1: 'https://forms.gle/p7UwBdqt3D4549nZ6',
-    b2: 'https://forms.gle/D1yMp9oqbuwZWhdbA',
-    b3: 'https://forms.gle/DGuSv7hJmWkyszPRA',
-    b4: 'https://forms.gle/4y1Kk6o5BHuu2Xxu7',
-  };
-
-  const bookTitles: Record<'b1'|'b2'|'b3'|'b4', string> = {
-    b1: 'Lo Unico Urgente es Vivir, aun así, LLegamos Tarde',
-    b2: 'EL ULTIMO SUSPIRO DE LA NUEVA ATLANTIDA',
-    b3: 'YO, CONTRADICCION ANDANTE',
-    b4: 'LIVING IS THE ONLY RUSH, AND YET, WE STILL RUN LATE',
-  };
-
-  const onOpenForm = (key: 'b1'|'b2'|'b3'|'b4') => {
-    try { lastScrollRef.current = window.scrollY; } catch {}
-    setDownloadForm(key);
-    // Scroll to the embedded form container for visibility
-    setTimeout(() => {
-      const el = document.getElementById('download-form-anchor');
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 0);
-  };
-
-  const onBackFromForm = () => {
-    const key = downloadForm;
-    setDownloadForm(null);
-    setTimeout(() => {
-      if (key && blockRefs[key].current) {
-        blockRefs[key].current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        try { window.scrollTo({ top: lastScrollRef.current || 0, behavior: 'smooth' }); } catch {}
-      }
-    }, 50);
-  };
-
   return (
     <div className="fade-in">
       <div className="hero-bar"><div className="container"><h1 className="hero-title">{t.explore}</h1></div></div>
@@ -155,6 +110,50 @@ const ConnectSection: React.FC<{ language: 'es' | 'en'; setActiveSection: (s: st
 
   const [step, setStep] = React.useState(0);
   const [answers, setAnswers] = React.useState<string[]>([]);
+  // Download form state & helpers (Escritura)
+  const [downloadForm, setDownloadForm] = React.useState<null | 'b1'|'b2'|'b3'|'b4'>(null);
+  const lastScrollRef = React.useRef<number>(0);
+  const blockRefs = {
+    b1: React.useRef<HTMLDivElement>(null),
+    b2: React.useRef<HTMLDivElement>(null),
+    b3: React.useRef<HTMLDivElement>(null),
+    b4: React.useRef<HTMLDivElement>(null),
+  } as const;
+
+  const formUrls: Record<'b1'|'b2'|'b3'|'b4', string> = {
+    b1: 'https://forms.gle/p7UwBdqt3D4549nZ6',
+    b2: 'https://forms.gle/D1yMp9oqbuwZWhdbA',
+    b3: 'https://forms.gle/DGuSv7hJmWkyszPRA',
+    b4: 'https://forms.gle/4y1Kk6o5BHuu2Xxu7',
+  };
+
+  const bookTitles: Record<'b1'|'b2'|'b3'|'b4', string> = {
+    b1: 'Lo Unico Urgente es Vivir, aun así, LLegamos Tarde',
+    b2: 'EL ULTIMO SUSPIRO DE LA NUEVA ATLANTIDA',
+    b3: 'YO, CONTRADICCION ANDANTE',
+    b4: 'LIVING IS THE ONLY RUSH, AND YET, WE STILL RUN LATE',
+  };
+
+  const onOpenForm = (key: 'b1'|'b2'|'b3'|'b4') => {
+    try { lastScrollRef.current = window.scrollY; } catch {}
+    setDownloadForm(key);
+    setTimeout(() => {
+      const el = document.getElementById('download-form-anchor');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0);
+  };
+
+  const onBackFromForm = () => {
+    const key = downloadForm;
+    setDownloadForm(null);
+    setTimeout(() => {
+      if (key && blockRefs[key!].current) {
+        blockRefs[key!].current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        try { window.scrollTo({ top: lastScrollRef.current || 0, behavior: 'smooth' }); } catch {}
+      }
+    }, 50);
+  };
   const questions = [
     {
       q: isEs ? '¿Cuál de estas situaciones te describe mejor?' : 'Which of these situations describes you best?',
